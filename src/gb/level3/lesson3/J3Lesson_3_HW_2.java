@@ -8,7 +8,7 @@ public class J3Lesson_3_HW_2 {
     public static void main(String[] args) {
 //        byte bArr[] = new byte[40];
 //        byte b = 0;
-        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+//        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
         Set<File> fileListSet = new LinkedHashSet<>();
         Set<InputStream> inputStreamSet = new LinkedHashSet<>();
         SequenceInputStream seqInputStream;
