@@ -11,7 +11,7 @@ public class J3Lesson_3_HW_1 {
         String outStr;
 
         if (!someFile.exists()) {
-            System.out.println("File not found!");
+            System.out.println("ERROR: File not found!");
             return;
         }
         System.out.println(someFile.getCanonicalPath());
@@ -20,13 +20,13 @@ public class J3Lesson_3_HW_1 {
             while (byteCounter != -1) {
                 outStr = String.valueOf(cArr, 0, byteCounter);
                 System.out.print(outStr);
-                byteCounter = br.read(cArr); //@Q или лучше печатать побайтово как сдеално ниже?
+                byteCounter = br.read(cArr); //@TODO или лучше печатать побайтово как сдеално ниже?
 //                for (int i = 0; i < byteCounter; i++) {
 //                    System.out.print(cArr[i]);
 //                }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("File is missing or HDD error!");
+            System.out.println("ERROR: File is missing or HDD error!");
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

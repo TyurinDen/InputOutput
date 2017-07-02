@@ -6,7 +6,9 @@ import java.util.*;
 public class J3Lesson_3_HW_2 {
 
     public static void main(String[] args) {
-        byte bArr[] = new byte[40];
+//        byte bArr[] = new byte[40];
+//        byte b = 0;
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
         Set<File> fileListSet = new LinkedHashSet<>();
         Set<InputStream> inputStreamSet = new LinkedHashSet<>();
         SequenceInputStream seqInputStream;
@@ -52,15 +54,19 @@ public class J3Lesson_3_HW_2 {
         inputStreamsEnum = Collections.enumeration(inputStreamSet);
         seqInputStream = new SequenceInputStream(inputStreamsEnum);
         try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
-            int bytesRead = seqInputStream.read(bArr);
+//            int bytesRead = seqInputStream.read(bArr);
+            int bytesRead = seqInputStream.read();
+            System.out.println(bytesRead);
             while(bytesRead != -1) {
                 try {
-                    bos.write(bArr, 0, bytesRead);
+                    bos.write(bytesRead);
+                    //bos.write(bArr, 0, bytesRead);
                 } catch (IOException e) {
                     System.out.println("ERROR: An error occurred while writing the output file!");
                     e.printStackTrace();
                 }
-                bytesRead = seqInputStream.read(bArr);
+                bytesRead = seqInputStream.read();
+//                System.out.println(bytesRead);
             }
         } catch (IOException e) {
             System.out.println("ERROR: Some problems with the output file or stream or an HDD error!");
@@ -73,5 +79,10 @@ public class J3Lesson_3_HW_2 {
             e.printStackTrace();
         }
         System.out.println("OK: Operation complete!");
+//        try {
+//            byteOutputStream.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     } //main
 } //class
