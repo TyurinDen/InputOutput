@@ -7,21 +7,21 @@ public class J3Lesson_3_HW_2 {
 
     public static void main(String[] args) {
 //        byte bArr[] = new byte[40];
-        Set<File> fileListSet = new LinkedHashSet<>();
         Set<InputStream> inputStreamSet = new LinkedHashSet<>();
+        List<File> fileListArr = new ArrayList<>();
         SequenceInputStream seqInputStream;
         Enumeration<InputStream> inputStreamsEnum;
         File someDir = new File("SOMEDIR");
         File outputFile = new File(someDir, "result.txt");
 
-        //@TODO Надо ли сообщения об ошибках заменить на константы?
+        //@TODO Надо ли сообщения об ошибках заменить на константы? НЕ НАДО!
         if (!someDir.exists()) {
             System.out.println("ERROR: The specified folder not found!");
             return;
         }
 
         try {
-            outputFile.createNewFile();//@TODO War: Result of 'File.createNewFile()' is ignored
+            outputFile.createNewFile();
         } catch (IOException e) {
             System.out.println("ERROR: An error occurred while creating the output file!");
             e.printStackTrace();
@@ -42,13 +42,13 @@ public class J3Lesson_3_HW_2 {
         for (File file: someDir.listFiles()) { //@TODO War: Dereference of 'someDir.listFiles()' may produce 'java.lang.NullPointerException'
             if (file.isDirectory()) {
                 System.out.println("DIR: " + file.getName());
-            } else fileListSet.add(file);
+            } else fileListArr.add(file);
         }
 
-        System.out.println(fileListSet);
-        for (File aFileListSet : fileListSet) { //DONE! //@TODO War: 'while' loop replaceable with 'foreach'
+        System.out.println(fileListArr);
+        for (File file : fileListArr) { //DONE! //@TODO War: 'while' loop replaceable with 'foreach'
             try {
-                inputStreamSet.add(new BufferedInputStream(new FileInputStream(aFileListSet)));
+                inputStreamSet.add(new BufferedInputStream(new FileInputStream(file)));
             } catch (FileNotFoundException e) {
                 System.out.println("ERROR: Some files are locked or missing or an HDD error!");
                 e.printStackTrace();
@@ -59,11 +59,11 @@ public class J3Lesson_3_HW_2 {
         seqInputStream = new SequenceInputStream(inputStreamsEnum);
         try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile))) {
 //            int bytesRead = seqInputStream.read(bArr);
-            int bytesRead = seqInputStream.read();
+            int bytesRead = seqInputStream.read(); //TODO Куда прочиталось?
             System.out.println(bytesRead);
             while(bytesRead != -1) {
                 try {
-                    bos.write(bytesRead);
+                    bos.write(bytesRead); //TODO Откуда записалось?
                     //bos.write(bArr, 0, bytesRead);
                 } catch (IOException e) {
                     System.out.println("ERROR: An error occurred while writing the output file!");
