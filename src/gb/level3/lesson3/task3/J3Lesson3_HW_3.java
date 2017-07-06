@@ -1,4 +1,4 @@
-package gb.level3.lesson3;
+package gb.level3.lesson3.task3;
 
 import java.io.*;
 import java.util.*;
