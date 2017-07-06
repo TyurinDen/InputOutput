@@ -6,95 +6,112 @@ import java.util.*;
 public class J3Lesson3_HW_3 {
 
     public static void main(String[] args) {
+        String charset[] = new String[] {"WINDOWS-1251", "IBM866", "KOI8-R", "UTF-8", "UTF-16"};
         final int SYMBOLS_PER_PAGE = 1800;
-        int pageNumber = 0, sw = 0;
+        int pageNumber = 0, switchCase1 = 0, index1 = 0;
         byte inputByteArr[] = new byte[SYMBOLS_PER_PAGE];
-        String outputStr = "";
+        boolean whileExitCond;
+        String outputStr = "", userAnswer = "";
         File inFile = new File("book1.txt");
         Scanner scanner = new Scanner(System.in);
-        boolean b;
-        BufferedReader br = null;
-        BufferedInputStream bis = null;
-        RandomAccessFile raf = null;
 
-        //TODO разобраться с нулевой страницей, оформить вывод = имя файла =
         if (!inFile.canRead()) {
             System.out.println("ERROR: Can't read this file...");
             return;
         }
 
-        //TODO смысла использовать RAF не вижу. То же самое реализуется другими способами.
-        //TODO и как его буфферизировать?
-        try {
-            raf = new RandomAccessFile(inFile, "r");
-        } catch (FileNotFoundException e) {
-            System.out.println("ERROR: An error occurred while opening the input file!");
-            e.printStackTrace();
-        }
-
-        System.out.println("The number of pages in the file " + inFile.getName() + " is "
+        System.out.println("The number of pages in the file \"" + inFile.getName() + "\" is "
                 + (inFile.length() / SYMBOLS_PER_PAGE));
-        System.out.println("Enter the page number you want to open >> ");
+        System.out.println("Enter the page number you want to open (pages start from zero) >> ");
         do {
             try {
                 pageNumber = scanner.nextInt();
-                b = true;
+                whileExitCond = true;
             } catch (InputMismatchException e) {
-                b = false;
+                whileExitCond = false;
                 scanner.nextLine();
-                switch (sw) {
+                switch (switchCase1) {
                     case 0:
                         System.out.println("Enter the page number using numbers >> ");
-                        sw++;
+                        switchCase1++;
                         break;
                     case 1:
                         System.out.println("Numbers please... >> ");
-                        sw++;
+                        switchCase1++;
                         break;
                     case 2:
                         System.out.println(" O_o it seems like a long time... >> ");
-                        sw++;
+                        switchCase1++;
                         break;
                     case 3:
                         System.out.println("The digits are '0' or '1' or '2' and so on up to '9'. Use them >> ");
-                        sw = 0;
+                        switchCase1 = 0;
                         break;
                 }
                 //e.printStackTrace();
             }
-        } while (!b);
+        } while (!whileExitCond);
 
-        System.out.println(pageNumber);
-        if ((pageNumber * SYMBOLS_PER_PAGE) > inFile.length()) {
+        if (pageNumber < 0 || (pageNumber * SYMBOLS_PER_PAGE) > inFile.length()) {
             System.out.println("There is no such page in this file...");
             return;
         }
 
-        try {
-            br = new BufferedReader(new FileReader(inFile));
+        try (RandomAccessFile raf = new RandomAccessFile(inFile, "r")) {
+            raf.seek(pageNumber * SYMBOLS_PER_PAGE);
+            raf.read(inputByteArr);
         } catch (FileNotFoundException e) {
+            System.out.println("ERROR: An error occurred while opening the input file!");
+            e.printStackTrace();
+        } catch (IOException e) {
             System.out.println("ERROR: The specified file is locked or missing or an HDD error!");
             e.printStackTrace();
         }
 
-        try {
-            raf.seek(pageNumber * SYMBOLS_PER_PAGE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("=================== " + inFile.getName() + " ===================");
+        System.out.println("PAGE: " + pageNumber);
+        System.out.println("CODEPAGE: " + charset[index1] + "\n");
 
         try {
-            raf.read(inputByteArr);
-        } catch (IOException e) {
-            System.out.println("ERROR: Some problem occurred when reading the file...");
-            e.printStackTrace();
-        }
-        try {
-            outputStr = new String(inputByteArr, "WINDOWS-1251");
+            outputStr = new String(inputByteArr, charset[index1]);
         } catch (UnsupportedEncodingException e) {
-            System.out.println("Damn it! There are some problems with the output string now ...");
+            System.out.println("ERROR: There are some problems with the output string now ...");
             e.printStackTrace();
         }
         System.out.println(outputStr);
+
+        do {
+            System.out.println("\n Is the text displayed correctly? (y/n/q)");
+            userAnswer = scanner.next().toLowerCase();
+//            scanner.next();
+            switch (userAnswer) {
+                case "y":
+                    whileExitCond = true;
+                    break;
+                case "n":
+                    whileExitCond = false;
+                    index1++;
+                    if (index1 > 4) index1 = 0;
+                    System.out.println("=================== " + inFile.getName() + " ===================");
+                    System.out.println("PAGE: " + pageNumber);
+                    System.out.println("CODEPAGE: " + charset[index1] + "\n");
+                    try {
+                        outputStr = new String(inputByteArr, charset[index1]);
+                    } catch (UnsupportedEncodingException e) {
+                        System.out.println("ERROR: There are some problems with the output string now ...");
+                        e.printStackTrace();
+                    }
+                    System.out.println(outputStr);
+                    break;
+                case "q":
+                    whileExitCond = true;
+                    break;
+                default:
+                    System.out.println("\nOnly y/n/q please...");
+                    whileExitCond = false;
+                    scanner.nextLine();
+            }
+        } while (!whileExitCond);
+        System.out.println("\nBYE!");
     } //main
 } //class
