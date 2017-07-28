@@ -14,6 +14,7 @@ public class J3Lesson3_HW_3 {
             System.out.println("The file is NULL");
             return;
         }
+        //TODO Надо ли проверять все входящие параметры на NULL? byteArr?
         System.out.println("=================== " + f.getName() + " ===================");
         System.out.println("PAGE: " + pageNumber);
         System.out.println("CODEPAGE: " + charSet + "\n");
@@ -43,7 +44,8 @@ public class J3Lesson3_HW_3 {
         System.out.println("Enter the page number you want to open (pages start from zero) >> ");
 
         userAnswer = scanner.next();
-        while (!userAnswer.matches("[0-9]{1,7}")) {
+        //"^[0-9]{1,7}"
+        while (!userAnswer.matches("^0?[1-9]{1}[0-9]{0,6}")) {
             scanner.nextLine();
             System.out.print("Invalid page number! Enter the page number >>\n");
             userAnswer = scanner.next();
