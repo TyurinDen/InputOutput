@@ -27,7 +27,7 @@ public class J3Lesson3_HW_3 {
         }
     }
     public static void main(String[] args) {
-        int pageNumber, swCase = 0, charSetIndex = 0;
+        int pageNumber, charSetIndex = 0;
         byte inputByteArr[] = new byte[SYMBOLS_PER_PAGE];
         boolean whileExitCond = false;
         String userAnswer;
@@ -73,23 +73,20 @@ public class J3Lesson3_HW_3 {
         do {
             System.out.println("\n Is the text displayed correctly? (y/n/q)");
             userAnswer = scanner.next();
-            while (!userAnswer.matches("[y,n,q,Y,N,Q]{1}")) {
+            while (!userAnswer.matches("(?i)[y,n,q]{1}")) {
                 scanner.nextLine();
                 userAnswer = scanner.next();
             }
-            switch (userAnswer) {
-                case "Y":
+            switch (userAnswer.toLowerCase()) {
                 case "y":
                     whileExitCond = true;
                     break;
-                case "N":
                 case "n":
                     whileExitCond = false;
                     charSetIndex++;
                     if (charSetIndex > 4) charSetIndex = 0;
                     printPageFromFile(inFile, inputByteArr, pageNumber, CHARSET[charSetIndex]);
                     break;
-                case "Q":
                 case "q":
                     whileExitCond = true;
                     break;
